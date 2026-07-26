@@ -1,0 +1,24 @@
+{
+  "name": "chantilly",
+  "version": "0.1.0",
+  "description": "Beautiful by default. Usable by design. Framework CSS léger où les bonnes pratiques UX sont encodées par défaut.",
+  "license": "MIT",
+  "author": "Nadia Djellali",
+  "homepage": "https://chantillycss.com",
+  "repository": { "type": "git", "url": "https://github.com/chantillycss/chantillycss" },
+  "keywords": ["css", "framework", "classless", "accessibility", "a11y", "ux", "lightweight", "design-tokens"],
+  "files": ["dist", "src"],
+  "style": "dist/chantilly.min.css",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build:site": "eleventy",
+    "build:css": "lightningcss --minify --bundle src/chantilly.css -o dist/chantilly.min.css && lightningcss --minify src/tokens.css -o dist/tokens.min.css && lightningcss --minify src/core.css -o dist/core.min.css",
+    "size": "gzip -c dist/chantilly.min.css | wc -c",
+    "test:contrast": "node scripts/check-contrast.mjs",
+    "build": "npm run build:css && npm run build:site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "lightningcss-cli": "^1.27.0"
+  }
+}

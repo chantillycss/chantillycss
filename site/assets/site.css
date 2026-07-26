@@ -1,0 +1,69 @@
+/* Styles du site vitrine — construits exclusivement sur les tokens.
+ * La navbar et la sidebar préfigurent le module navigation.css. */
+
+.site-header {
+  position: sticky; inset-block-start: 0; z-index: var(--z-sticky);
+  background: var(--paper); border-block-end: 1px solid var(--pearl);
+}
+.site-nav { display: flex; align-items: center; gap: var(--space-lg); min-block-size: 4rem; }
+.brand { font-weight: var(--weight-bold); font-size: var(--text-h3); color: var(--ink); text-decoration: none; }
+.site-nav a:not(.brand) {
+  color: var(--ink); text-decoration: none; font-weight: var(--weight-medium);
+  min-block-size: var(--tap-target); display: inline-flex; align-items: center;
+}
+.site-nav a:not(.brand):hover { text-decoration: underline; text-underline-offset: 0.3em; }
+.nav-end { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-md); }
+.theme-toggle {
+  min-block-size: var(--tap-target); min-inline-size: var(--tap-target);
+  padding-inline: var(--space-sm); background: transparent; color: var(--ink);
+  border: 1px solid var(--pearl); font-size: 1.1rem;
+}
+.version-badge {
+  font-family: var(--font-mono); font-size: var(--text-caption); color: var(--stone);
+  border: 1px solid var(--pearl); border-radius: 999px; padding: 0.35em 0.9em;
+}
+
+/* Hero de la home */
+.hero { padding-block: clamp(var(--space-2xl), 12vh, 7rem); text-align: center; }
+.hero h1 { font-size: clamp(2.8rem, 2rem + 4vw, 4.5rem); letter-spacing: -0.02em; margin-block: 0 var(--space-md); }
+.hero .baseline { font-size: var(--text-h3); color: var(--stone); max-inline-size: none; }
+.hero-actions { justify-content: center; margin-block-start: var(--space-xl); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.install {
+  display: inline-flex; align-items: center; gap: var(--space-md);
+  margin-block-start: var(--space-xl); font-family: var(--font-mono);
+  font-size: var(--text-caption); background: var(--pearl);
+  border-radius: 999px; padding: 0.4em 0.5em 0.4em 1.4em; color: var(--ink);
+}
+.copy-btn { min-block-size: 2.2rem; padding-inline: var(--space-md); font-size: var(--text-caption); border-radius: 999px; }
+
+/* Layout documentation façon tailwindcss.com */
+.docs-layout { padding-block: var(--space-xl); align-items: flex-start; }
+.docs-nav { flex-basis: 14rem; position: sticky; inset-block-start: 5.5rem; }
+.docs-nav-cat {
+  font-size: var(--text-caption); font-weight: var(--weight-bold);
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--stone);
+  margin-block: var(--space-lg) var(--space-sm);
+}
+.docs-nav ul { list-style: none; padding: 0; margin: 0; }
+.docs-nav a {
+  display: flex; align-items: center; min-block-size: var(--tap-target);
+  color: var(--ink); text-decoration: none;
+  border-inline-start: 2px solid var(--pearl); padding-inline-start: var(--space-md);
+}
+.docs-nav a:hover { border-color: var(--stone); }
+.docs-nav a[aria-current="page"] { border-color: var(--accent); font-weight: var(--weight-medium); }
+
+/* Encart "règle UX" — la signature pédagogique de la doc */
+.regle-ux {
+  border: 1px solid var(--info); border-radius: var(--radius);
+  background: var(--info-surface); color: var(--info-text);
+  padding: var(--space-md) var(--space-lg);
+}
+.regle-ux strong { display: block; margin-block-end: var(--space-xs); }
+
+.site-footer {
+  border-block-start: 1px solid var(--pearl); padding-block: var(--space-xl);
+  color: var(--stone); font-size: var(--text-caption); margin-block-start: var(--space-3xl);
+}
+.site-footer .cluster { justify-content: space-between; }

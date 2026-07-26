@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} — {{ site.nom }}</title>
+  <link rel="stylesheet" href="/assets/chantilly/tokens.css">
+  <link rel="stylesheet" href="/assets/chantilly/core.css">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Navigation principale">
+      <a class="brand" href="/">{{ site.nom }}</a>
+      <a href="/docs/demarrage/">Documentation</a>
+      <a href="/blog/">Blog</a>
+      <div class="nav-end">
+        <button class="theme-toggle" type="button" aria-label="Basculer le mode sombre" onclick="toggleTheme()">◐</button>
+        <span class="version-badge">v{{ site.version }}</span>
+      </div>
+    </nav>
+  </header>
+
+  <main>{{ content | safe }}</main>
+
+  <footer class="site-footer">
+    <div class="container cluster">
+      <span>{{ site.nom }} — MIT — conçu par Nadia Djellali</span>
+      <span class="cluster">
+        <a href="{{ site.github }}">GitHub</a>
+        <a href="{{ site.npm }}">npm</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="/assets/site.js"></script>
+</body>
+</html>

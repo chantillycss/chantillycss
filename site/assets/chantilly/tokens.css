@@ -1,0 +1,153 @@
+/*!
+ * Chantilly — tokens.css (v0.1)
+ * The single source of truth. Every other file consumes these tokens.
+ * License: MIT
+ *
+ * Rules encoded here:
+ * - Base font 16px (browser default, prevents iOS input zoom)
+ * - Body line-height 1.5 (WCAG 1.4.12), headings 1.2
+ * - Every shipped color combination is contrast-checked:
+ *   AA (>= 4.5:1) minimum, AAA (>= 7:1) for text on semantic surfaces
+ * - Opacity never creates meaning-bearing tints (overlays/disabled only)
+ * - Colors are provisional values: changing the palette = changing
+ *   these lines only, nothing else in the framework.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---------------------------------------------------------------
+   * 1. Neutral palette — the monochrome skeleton
+   * Contrast (light): ink/paper 15.8:1 · stone/paper >= 4.5:1
+   * Contrast (dark):  ink/paper 14.3:1 · stone/paper 6.8:1
+   * --------------------------------------------------------------- */
+  --ink:    light-dark(#1F1F1C, #ECEAE3); /* primary text */
+  --stone:  light-dark(#5F5E5A, #A5A39A); /* secondary text, AA on paper */
+  --mist:   light-dark(#8A8880, #6E6C66); /* input borders, >= 3:1 (WCAG 1.4.11) */
+  --pearl:  light-dark(#E4E2DB, #262624); /* raised surfaces, dividers */
+  --paper:  light-dark(#FBFAF7, #1B1B19); /* page background */
+
+  /* ---------------------------------------------------------------
+   * 2. Semantic families — conventional hues, desaturated tones
+   * Trio per family: full (borders, icons, solid buttons)
+   *                  surface (banner/badge background)
+   *                  text (AAA-checked on its surface)
+   * Palette: Terracotta · Sauge · Ocre · Ardoise (provisional)
+   * --------------------------------------------------------------- */
+
+  /* Error — Terracotta. text/surface 8.0:1 (light), 8.8:1 (dark) */
+  --error:          light-dark(#B0473F, #CD7168);
+  --error-surface:  light-dark(#F8ECEA, #352220);
+  --error-text:     light-dark(#7C2D27, #EFB9B2);
+
+  /* Success — Sauge. text/surface 8.0:1 (light), 9.5:1 (dark) */
+  --success:         light-dark(#517A4D, #84A97F);
+  --success-surface: light-dark(#EDF3EC, #232B22);
+  --success-text:    light-dark(#31502E, #C0D7BB);
+
+  /* Warning — Ocre. text/surface 7.9:1 (light), 9.2:1 (dark) */
+  --warning:         light-dark(#9A681C, #C99C4F);
+  --warning-surface: light-dark(#F9F1E2, #2E2718);
+  --warning-text:    light-dark(#654310, #E6C88E);
+
+  /* Info — Ardoise. text/surface 8.5:1 (light), 9.1:1 (dark) */
+  --info:          light-dark(#48708F, #7CA3C2);
+  --info-surface:  light-dark(#EBF0F5, #202A32);
+  --info-text:     light-dark(#2C475C, #B6CFE3);
+
+  /* ---------------------------------------------------------------
+   * 3. Accent — identity and action, carries no system meaning
+   * Defaults to ink (monochrome out of the box).
+   * Users override this single token with their brand color;
+   * they own the AA check for custom values (documented).
+   * --------------------------------------------------------------- */
+  --accent:          var(--ink);
+  --accent-contrast: var(--paper); /* text on solid accent */
+
+  /* ---------------------------------------------------------------
+   * 4. Typography — system stack, zero embedded fonts
+   * --------------------------------------------------------------- */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo,
+               Consolas, monospace;
+
+  /* Scale: 6 sizes, ratio 1.25, fluid via clamp() */
+  --text-caption: 0.8rem;
+  --text-body:    1rem;                                   /* 16px, non-negotiable */
+  --text-h3:      1.25rem;
+  --text-h2:      clamp(1.35rem, 1.15rem + 0.8vw, 1.563rem);
+  --text-h1:      clamp(1.563rem, 1.2rem + 1.5vw, 1.953rem);
+  --text-display: clamp(1.953rem, 1.4rem + 2.2vw, 2.441rem);
+
+  --leading-body:    1.5;   /* WCAG 1.4.12 */
+  --leading-heading: 1.2;
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-bold:    650;    /* variable-font sweet spot; resolves to 600/700 otherwise */
+
+  --measure: 65ch;          /* max line length for prose */
+
+  /* ---------------------------------------------------------------
+   * 5. Spacing — 8px base, t-shirt naming
+   * --------------------------------------------------------------- */
+  --space-xs:  0.25rem;  /*  4px */
+  --space-sm:  0.5rem;   /*  8px */
+  --space-md:  1rem;     /* 16px */
+  --space-lg:  1.5rem;   /* 24px */
+  --space-xl:  2rem;     /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  --space-3xl: 4rem;     /* 64px */
+
+  --gap: var(--space-md); /* default gutter, override per layout */
+
+  /* ---------------------------------------------------------------
+   * 6. Shape
+   * Presets: 0 (raw) · 2px (sharp) · 8px (default)
+   * --------------------------------------------------------------- */
+  --radius: 8px;
+
+  /* ---------------------------------------------------------------
+   * 7. Layout
+   * Breakpoints (media queries cannot read custom properties —
+   * these are the canonical values, mobile-first):
+   *   sm 640px · md 768px · lg 1024px · xl 1280px
+   * --------------------------------------------------------------- */
+  --container-max: 1200px;
+  --container-pad: clamp(var(--space-md), 4vw, var(--space-2xl));
+
+  /* ---------------------------------------------------------------
+   * 8. Interaction
+   * --------------------------------------------------------------- */
+  --tap-target: 2.75rem;              /* 44px minimum touch target */
+
+  --focus-ring: 3px solid var(--accent);   /* the framework's one visual signature */
+  --focus-offset: 2px;
+
+  --transition: 160ms ease-out;       /* micro-transitions only */
+
+  --opacity-disabled: 0.5;            /* the sanctioned uses of opacity */
+  --overlay: light-dark(rgb(31 31 28 / 0.5), rgb(0 0 0 / 0.6));
+
+  /* Subtle elevation — never decorative */
+  --shadow-raised:  0 1px 3px rgb(0 0 0 / 0.08);
+  --shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.14);
+
+  /* ---------------------------------------------------------------
+   * 9. Stacking
+   * --------------------------------------------------------------- */
+  --z-sticky:  100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-toast:   400;
+}
+
+/* Forced themes — user or site-level override of the OS preference */
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"]  { color-scheme: dark; }
+
+/* Motion is opt-in for people who allow it */
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition: 0ms; }
+}

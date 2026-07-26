@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+title: Blog
+tags: ""
+---
+<div class="container center stack">
+  <h1>Le blog</h1>
+  <p>Les codes du web, sans le jargon : directives d'accessibilité et lois UX,
+     synthétisées à l'essentiel.</p>
+  <ul role="list" class="stack">
+  {% for post in collections.post | reverse %}
+    <li>
+      <a href="{{ post.url }}"><strong>{{ post.data.title }}</strong></a><br>
+      <small>{{ post.date.toLocaleDateString('fr-FR') }} — {{ post.data.resume }}</small>
+    </li>
+  {% endfor %}
+  </ul>
+</div>

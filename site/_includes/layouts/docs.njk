@@ -1,0 +1,19 @@
+---
+layout: layouts/base.njk
+---
+<div class="container sidebar docs-layout">
+  <nav class="docs-nav" aria-label="Navigation de la documentation">
+    {% for cat in docsnav %}
+      <p class="docs-nav-cat">{{ cat.categorie }}</p>
+      <ul role="list">
+        {% for p in cat.pages %}
+          <li><a href="{{ p.url }}" {% if page.url == p.url %}aria-current="page"{% endif %}>{{ p.titre }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </nav>
+  <article class="docs-content stack">
+    <h1>{{ title }}</h1>
+    {{ content | safe }}
+  </article>
+</div>

@@ -1,0 +1,14 @@
+/*!
+ * Chantilly — bundle complet (tokens + core + modules v1)
+ * Beautiful by default. Usable by design.
+ * License: MIT
+ */
+@import "tokens.css";
+@import "core.css";
+@import "modules/forms.css";
+/* Modules v0.5 — décommentés au fur et à mesure :
+@import "modules/navigation.css";
+@import "modules/feedback.css";
+@import "modules/tables.css";
+@import "modules/commerce.css";
+*/

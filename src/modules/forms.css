@@ -1,0 +1,222 @@
+/*!
+ * Chantilly — forms.css (v0.1)
+ * Field structures: hint, error, choices, loading, stepper, error summary.
+ * Extends the classless base from core.css. Requires tokens.css + core.css.
+ * License: MIT
+ *
+ * Written against "Définition de Fini v1.0" — every rule maps to a checklist item.
+ *
+ * Canonical markup (the doc's copy-paste example):
+ *
+ *   <div class="field">
+ *     <label for="email">Adresse e-mail</label>
+ *     <p class="field-hint" id="email-hint">Format : nom@domaine.fr</p>
+ *     <input type="email" id="email" name="email"
+ *            autocomplete="email" spellcheck="false" autocapitalize="off"
+ *            enterkeyhint="next" required
+ *            aria-describedby="email-hint email-error">
+ *     <p class="field-error" id="email-error" role="alert">
+ *       <strong>Adresse invalide :</strong> il manque le caractère @.
+ *     </p>
+ *   </div>
+ *
+ * Hint BEFORE error in the DOM (checklist ❸): users read help before failing.
+ * The error is announced via role="alert" without moving focus (checklist ❺).
+ */
+
+@layer chantilly.reset, chantilly.base, chantilly.layout, chantilly.forms;
+
+@layer chantilly.forms {
+
+  /* ---------------------------------------------------------------
+   * Field group — one field, one column (checklist ❸)
+   * --------------------------------------------------------------- */
+  .field { margin-block-end: var(--space-lg); }
+  .field > input, .field > select, .field > textarea { margin-block-end: 0; }
+
+  /* Data-sized fields (checklist ❻): a 5-char postcode in a 65ch box
+   * mis-signals its nature. Widths in ch = sized to the expected data. */
+  .field-short  input { max-inline-size: 16ch; }  /* postcode, date, phone */
+  .field-tiny   input { max-inline-size: 8ch; }   /* CVV, day, 2FA code   */
+
+  /* ---------------------------------------------------------------
+   * Hint — help lives above the input, linked by aria-describedby
+   * --------------------------------------------------------------- */
+  .field-hint {
+    font-size: var(--text-caption);
+    color: var(--stone);
+    margin-block: calc(-1 * var(--space-xs)) var(--space-xs);
+    max-inline-size: var(--measure);
+  }
+
+  /* ---------------------------------------------------------------
+   * Error — what went wrong + how to fix (checklist ❸)
+   * Hidden until the field is actually invalid; shown by pure CSS.
+   * Signals: position + border + bold prefix — never color alone (❺).
+   * --------------------------------------------------------------- */
+  .field-error {
+    display: none;
+    font-size: var(--text-caption);
+    color: var(--error-text);
+    border-inline-start: 3px solid var(--error);
+    padding-inline-start: var(--space-sm);
+    margin-block-start: var(--space-xs);
+    max-inline-size: var(--measure);
+  }
+
+  /* Client-side: reveal once the user has left the field invalid
+   * (:user-invalid — never punished while typing, checklist ❷).
+   * Server-side: reveal when the backend sets aria-invalid="true". */
+  .field:has(:user-invalid) .field-error,
+  .field:has([aria-invalid="true"]) .field-error {
+    display: block;
+  }
+  input[aria-invalid="true"],
+  select[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
+    border-color: var(--error);
+  }
+
+  /* ---------------------------------------------------------------
+   * Error summary — GOV.UK pattern compatibility (checklist ❸).
+   * Placed before the form on server-side validation; each item links
+   * to its field (#id). Focus it on render (tabindex="-1" in HTML).
+   * --------------------------------------------------------------- */
+  .error-summary {
+    border: 2px solid var(--error);
+    border-radius: var(--radius);
+    background: var(--error-surface);
+    color: var(--error-text);
+    padding: var(--space-md) var(--space-lg);
+    margin-block-end: var(--space-xl);
+  }
+  .error-summary a { color: var(--error-text); }
+
+  /* ---------------------------------------------------------------
+   * Autofill — Chrome's yellow flash vs. the design system (❷).
+   * The background can't be overridden; an inset shadow covers it.
+   * --------------------------------------------------------------- */
+  input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 100px var(--paper);
+    -webkit-text-fill-color: var(--ink);
+    caret-color: var(--ink);
+  }
+
+  /* ---------------------------------------------------------------
+   * Choice groups — checkboxes / radios (checklist ❷ + ❺)
+   * The whole label row is the target, not the 20px box.
+   * --------------------------------------------------------------- */
+  .choices label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-block-size: var(--tap-target);
+    font-weight: var(--weight-regular);
+    margin-block-end: 0;
+    cursor: pointer;
+  }
+  .choices input { margin-inline-end: 0; }
+
+  /* Whole-form disabling in one attribute (checklist ❷) */
+  fieldset:disabled {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  /* ---------------------------------------------------------------
+   * Loading state — aria-busy on the submit button (checklist ❼).
+   * The label stays in the DOM: screen readers keep the context.
+   * --------------------------------------------------------------- */
+  button[aria-busy="true"] {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  button[aria-busy="true"]::after {
+    content: "";
+    inline-size: 1em;
+    block-size: 1em;
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    animation: chantilly-spin 0.7s linear infinite;
+  }
+  @keyframes chantilly-spin { to { transform: rotate(1turn); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    button[aria-busy="true"]::after {
+      animation: none;
+      border: none;
+      inline-size: auto;
+      block-size: auto;
+      content: "…";           /* motion replaced, information kept (❷) */
+    }
+  }
+
+  /* ---------------------------------------------------------------
+   * Stepper — multi-step forms, purely visual (checklist ❼).
+   * One step = one URL; the server owns the state. aria-current="step"
+   * marks the active one.
+   *
+   *   <ol class="stepper">
+   *     <li><a href="/commande/adresse">Adresse</a></li>
+   *     <li aria-current="step">Paiement</li>
+   *     <li>Confirmation</li>
+   *   </ol>
+   * --------------------------------------------------------------- */
+  .stepper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    list-style: none;
+    padding: 0;
+    counter-reset: step;
+    font-size: var(--text-caption);
+    margin-block-end: var(--space-xl);
+  }
+  .stepper li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--stone);
+    max-inline-size: none;
+  }
+  .stepper li::before {
+    counter-increment: step;
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.8em;
+    block-size: 1.8em;
+    border: 1.5px solid var(--mist);
+    border-radius: 50%;
+    font-variant-numeric: tabular-nums;
+  }
+  .stepper li[aria-current="step"] {
+    color: var(--ink);
+    font-weight: var(--weight-medium);
+  }
+  .stepper li[aria-current="step"]::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .stepper a { color: inherit; }
+
+  /* ---------------------------------------------------------------
+   * Sticky-header safety (checklist ❻): a focused field is never
+   * hidden behind a sticky bar when scrolled into view.
+   * --------------------------------------------------------------- */
+  input, select, textarea, button {
+    scroll-margin-block-start: 6rem;
+  }
+
+  /* ---------------------------------------------------------------
+   * Forced colors — Windows High Contrast (checklist ❺).
+   * System colors take over; keep shapes meaningful.
+   * --------------------------------------------------------------- */
+  @media (forced-colors: active) {
+    .field-error { border-inline-start-width: 4px; }
+    button[aria-busy="true"]::after { border-color: currentColor transparent currentColor currentColor; }
+  }
+}

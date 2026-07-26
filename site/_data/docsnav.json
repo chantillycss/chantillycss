@@ -1,0 +1,14 @@
+[
+  {
+    "categorie": "Démarrage",
+    "pages": [
+      { "titre": "Installation", "url": "/docs/demarrage/" }
+    ]
+  },
+  {
+    "categorie": "Styles de base",
+    "pages": [
+      { "titre": "Typographie & classless", "url": "/docs/base/" }
+    ]
+  }
+]
