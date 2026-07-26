@@ -1,0 +1,44 @@
+# Chantilly — npm release via Trusted Publishing (OIDC)
+# Triggered by publishing a GitHub Release (or manually from the Actions tab).
+# No npm token is stored anywhere: npm authenticates this workflow through
+# OpenID Connect, and packages ship with build provenance.
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC authentication with the npm registry
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm (>= 11.5 required for Trusted Publishing)
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify WCAG contrast ratios
+        # Contrast is tested, not promised — the release fails if any
+        # shipped color combination regresses below its threshold.
+        run: npm run test:contrast
+
+      - name: Build minified CSS bundles
+        run: npm run build:css
+
+      - name: Publish with provenance
+        run: npm publish --provenance --access public
