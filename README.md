@@ -20,8 +20,6 @@ Chantilly livre des composants corrects — chaque état, chaque règle, déjà 
 
 ---
 
-[📖 Documentation](https://chantillycss.com)
-[📦 npm](https://www.npmjs.com/package/chantilly)
-[📰 Blog — les lois UX en clair](https://chantillycss.com/blog/)
+[📖 Documentation](https://chantillycss.com)  .  [📦 npm](https://www.npmjs.com/package/chantilly)  .  [📰 Blog — les lois UX en clair](https://chantillycss.com/blog/)
 
 MIT · conçu par [Nadia Djellali](https://github.com/NadiaWho)
